@@ -1,4 +1,40 @@
-**/node_modules
+# Dependencies
 node_modules
-.angular
+.pnpm-store
+
+# Build outputs
 dist
+tmp
+out-tsc
+
+# NX
+.nx/cache
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Testing
+coverage
+.nyc_output
+
+# System Files
+.DS_Store
+Thumbs.db
