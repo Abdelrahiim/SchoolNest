@@ -21,10 +21,10 @@ This app is designed to simplify school operations, from attendance tracking and
 ```bash
 SchoolNest/
 ├── apps/
-│   ├── backend/         # Backend application
-│   └── frontend/        # Frontend application
+│   ├── ...                  # Other backend services
+│   ├── api-gateway/         # Backend Service
+│   └── web-client/          # Frontend Application
 ├── libs/                # Shared libraries
-├── tools/               # Development tools and scripts
 ├── README.md            # Project overview
 └── ...                  # Other configuration files
 ```
@@ -34,7 +34,7 @@ SchoolNest/
 ## 🛠️ Tech Stack
 
 - **Backend**: Node.js
-- **Frontend**: (To be decided)
+- **Frontend**: Angular
 - **Monorepo Management**: Nx
 - **Database**: (To be decided)
 - **API**: RESTful or GraphQL (To be decided)
@@ -55,17 +55,19 @@ cd SchoolNest
 2. **Install Dependencies**
 
 ```bash
-npm install
+pnpm install -r
 ```
 
 3. **Run the Development Server**
 
 ```bash
-nx serve
+nx serve api-gateway
+nx serve web-client
 ```
 
 4. **Explore the App**  
-   Open your browser and navigate to `http://localhost:4200` to view the app.
+   Open your browser and navigate to `http://localhost:4200` to view the client.
+   Open your browser and navigate to `http://localhost:3000` to view the api-gateway.
 
 ---
 
@@ -83,7 +85,7 @@ We welcome contributions! If you'd like to contribute to SchoolNest, please foll
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. See the [LICENSE](https://chat.deepseek.com/a/chat/s/LICENSE) file for details.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
