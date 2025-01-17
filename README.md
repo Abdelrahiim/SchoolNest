@@ -41,7 +41,7 @@ SchoolNest/
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started  
 
 To get started with SchoolNest, follow these steps:
 
