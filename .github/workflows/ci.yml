@@ -37,7 +37,7 @@ jobs:
       - name: Disable Nx Cloud in CI
         run: echo "NX_CLOUD_DISTRIBUTED_EXECUTION=false" >> $GITHUB_ENV
 
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install -r --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
