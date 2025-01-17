@@ -1,50 +1,45 @@
-# -------------- BUILDER --------------
-FROM node:alpine AS builder
+FROM node:20-alpine AS builder
 
-# Add dependencies for node-gyp and other native modules
-RUN apk add --no-cache python3 make g++ git openssh
+# Install build dependencies
+RUN apk add --no-cache python3 make g++ git
 
-WORKDIR /app
-
-# Install pnpm globally
-RUN npm install -g pnpm
-
-# Copy workspace configuration files
-COPY package.json pnpm-lock.yaml nx.json tsconfig.base.json .npmrc pnpm-workspace.yaml ./
-
-# # Copy all package.json files
-COPY apps/api-gateway/package.json ./apps/api-gateway/package.json
-
-# Install all dependencies
-RUN pnpm install -r
-
-# Copy the rest of the source code
-COPY apps/api-gateway ./apps/api-gateway
-
-# Build all applications (or specific ones based on args)
-ARG APP=api-gateway
-RUN pnpm nx build ${APP} --prod
-
-# -------------- RUNNER --------------
-FROM node:alpine AS runner
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
+# Copy only necessary files for build
+COPY package.json pnpm-lock.yaml ./
+COPY nx.json tsconfig.base.json ./
 
-# Install pnpm globally
-RUN npm install -g pnpm
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
-# Copy workspace configuration
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
+# Copy source code
+COPY . .
 
-# Copy the built application
-ARG APP=api-gateway
-COPY --from=builder /app/dist/apps/${APP} ./dist/apps/${APP}
-# COPY --from=builder /app/apps/${APP}/package.json ./apps/${APP}/package.json
+# Build the application
+RUN pnpm nx build api-gateway --prod
 
-# Install production dependencies only
+# Production stage - using smaller base image
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+# Copy only the built application and package files needed for production
+COPY --from=builder /app/dist/apps/api-gateway ./
+
+# Install only the absolutely necessary production dependencies
+RUN npm install --production --no-package-lock tslib
+
+# Clean npm cache
+RUN npm cache clean --force
+
+# Set environment variables
 ENV NODE_ENV=production
-RUN pnpm install --prod
+
+# Expose the port the app runs on
+EXPOSE 3000
 
 # Start the application
-CMD ["node", "dist/apps/api-gateway/main.js"] 
+CMD ["node", "main.js"]

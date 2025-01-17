@@ -9,6 +9,7 @@ out-tsc
 
 # NX
 .nx/cache
+.nx/workspace-data
 
 # Git
 .git
