@@ -34,6 +34,9 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
+      - name: Disable Nx Cloud in CI
+        run: echo "NX_CLOUD_DISTRIBUTED_EXECUTION=false" >> $GITHUB_ENV
+
       - run: pnpm install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
 
